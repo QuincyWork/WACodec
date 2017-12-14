@@ -131,7 +131,7 @@ function StringToTable(inString, fromChat)
 end
 
 function DisplayToTableString(str)
-  local ret = "{\n";  
+  local ret = "{\n";
   local function recurse(table, level)
     for i,v in pairs(table) do
       ret = ret..strrep("    ", level).."[";
@@ -170,7 +170,7 @@ function DisplayToTableString(str)
   return ret;
 end
 
---[[ String Table 
+--[[ String Table
 function serialize(obj)
     local lua = ""
     local t = type(obj)
@@ -220,20 +220,24 @@ end
 
 ]]--
 
+function WADecode(source)
+	local decode = StringToTable(source,true);
+	return DisplayToTableString(decode);
+end
 
+-- test filename
+if arg ~= nil then
+	local source = arg[1];
+	local dest = source .. ".out";
+	local sourceFile = assert(io.open(source, 'r'));
+	local destFile =  assert(io.open(dest, 'w'));
 
-local source = arg[1];
-local dest = source .. ".out";
-local sourceFile = assert(io.open(source, 'r'));
-local destFile =  assert(io.open(dest, 'w'));
+	local value = sourceFile:read("*all");
+	value = WADecode(value);
 
-local value = sourceFile:read("*all");
-value = StringToTable(value,true);
-value = DisplayToTableString(value);
-
-destFile:write(value);
-sourceFile:close();
-destFile:close();
+	destFile:write(value);
+	sourceFile:close();
+	destFile:close();
+end
 
 --print(value);
-
